@@ -241,11 +241,11 @@ const HomePage: React.FC = () => {
                       onClick={() => handleSubmitQuestion("Explain constitutional rights in India.")}
                     />
                     <QuickAccessCard
-                      title="My Court Cases"
+                      title="My Court Cases (Coming soon)"
                       description="Track and manage all your ongoing legal cases"
                       icon="📋"
                       color="bg-indian-navy"
-                      onClick={() => handleSubmitQuestion("How can I track my court cases?")}
+                      // onClick={() => handleSubmitQuestion("How can I track my court cases?")}
                     />
                     <QuickAccessCard
                       title="Family Law"
@@ -269,7 +269,7 @@ const HomePage: React.FC = () => {
                       onClick={() => handleSubmitQuestion("What are my consumer rights in India?")}
                     />
                     <QuickAccessCard
-                      title="Find Lawyers"
+                      title="Find Lawyers (Coming soon)"
                       description="Connect with qualified legal professionals"
                       icon="👨‍💼"
                       color="bg-indian-emerald"
