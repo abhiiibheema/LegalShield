@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  backend:
+    image: abhibheema/legal-shield-backend:v1.0
+    ports:
+      - "5000:5000"
+
+  frontend:
+    image: abhibheema/legal-shield-frontend:v1.0
+    ports:
+      - "80:80"
