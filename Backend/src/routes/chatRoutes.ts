@@ -31,8 +31,8 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 async function generateResponse(question: string): Promise<string>  {
   const ans = await  axios.post('http://183.82.62.137:8000/query',{
       "query": question,
-      "zilliz_api_key": "5a82d2e27776c92556dec33d180f50412d60b618ba9781c37b3161ec21ef81ef39ac413baec3f7c9adbcae3b1df19a871ef6119d",
-      "gemini_api_key": "AIzaSyDQVfe4B1WJVCUdLkllHdwJULcrkRZvX0Q"
+      "zilliz_api_key": process.env.ZELLIZ_API,
+      "gemini_api_key": process.env.GEMINI_API
   
   })
   return ans.data.response;
