@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import ChatSession from '../models/ChatSession';
 import dotenv from 'dotenv';
 import axios, { AxiosResponse } from 'axios'
+import { log } from 'console';
 dotenv.config();
 
 // Extend Request type to include userId
@@ -31,7 +32,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 async function generateResponse(question: string): Promise<string>  {
   const ans = await  axios.post('http://183.82.62.137:8000/query',{
       "query": question,
-      "zilliz_api_key": process.env.ZELLIZ_API,
+      "zilliz_api_key": process.env.ZILLIZ_API,
       "gemini_api_key": process.env.GEMINI_API
   
   })
