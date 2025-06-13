@@ -1,5 +1,3 @@
-# Backend/Dockerfile
-
 # Use official Node image
 FROM node:18-alpine
 
@@ -13,8 +11,8 @@ RUN npm install
 # Copy rest of the source code
 COPY . .
 
-# Build if you have build step, otherwise skip
-# RUN npm run build
+# Build the TypeScript code (creates dist/)
+RUN npm run build
 
 # Expose backend port (change if needed)
 EXPOSE 5000
