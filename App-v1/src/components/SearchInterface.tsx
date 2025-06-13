@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Search, Send, Sparkles, BookOpen, Users, FileText } from 'lucide-react';
+import ReactMarkdown from 'react-markdown'; // Import react-markdown
 
 interface SearchInterfaceProps {
   onSubmitQuestion: (query: string, response: string) => void;
@@ -9,6 +10,7 @@ interface SearchInterfaceProps {
 const SearchInterface: React.FC<SearchInterfaceProps> = ({ onSubmitQuestion }) => {
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [response, setResponse] = useState(''); // State to store the response
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,17 +18,20 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ onSubmitQuestion }) =
     setIsLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.post(
-        '/api/chat/ask',
+      const res = await axios.post('http://localhost:3000/api/chat-sessions/ask',
         { question: query },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      const response = res.data.response || 'No response from backend';
-      onSubmitQuestion(query, response);
+      const responseText = res.data.response || 'No response from backend';
+      console.log(responseText)
+      setResponse("responseText"); // Store the response
+      onSubmitQuestion(query, responseText); // Pass to parent
       setQuery('');
     } catch (error) {
       console.error('Error sending question:', error);
-      onSubmitQuestion(query, 'Error: Could not get a response from the server.');
+      const errorMsg = 'Error: Could not get a response from the server.';
+      setResponse(errorMsg); // Store error message
+      onSubmitQuestion(query, errorMsg);
     } finally {
       setIsLoading(false);
     }
@@ -86,6 +91,13 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ onSubmitQuestion }) =
           </form>
         </div>
       </div>
+      {/* Display the response with ReactMarkdown */}
+      {response && (
+        <div className="mt-6 p-4 bg-white rounded-xl shadow-md border border-indian-gold/20">
+          <h3 className="text-lg font-serif font-semibold text-indian-maroon mb-2">Response:</h3>
+          <ReactMarkdown className="text-gray-700 prose max-w-none">{response}</ReactMarkdown>
+        </div>
+      )}
       <div className="mt-8">
         <h3 className="text-xl font-serif font-semibold text-indian-maroon mb-4 text-center">
           Popular Legal Questions

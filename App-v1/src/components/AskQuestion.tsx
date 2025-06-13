@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import { Search, Send, Sparkles } from 'lucide-react';
+import ReactMarkdown from 'react-markdown'; // Import react-markdown
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -79,7 +80,11 @@ const AskQuestion: React.FC<AskQuestionProps> = ({ session, onCreateSession, onU
                   msg.role === 'user' ? 'bg-indian-maroon text-white' : 'bg-gray-100 text-gray-800'
                 }`}
               >
-                {msg.message}
+                {msg.role === 'assistant' ? (
+                  <ReactMarkdown>{msg.message}</ReactMarkdown>
+                ) : (
+                  msg.message
+                )}
               </span>
             </motion.div>
           ))

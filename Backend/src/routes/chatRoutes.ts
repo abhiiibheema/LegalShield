@@ -1,9 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import ChatSession from '../models/ChatSession';
-import { log } from 'console';
 import dotenv from 'dotenv';
-
+import axios, { AxiosResponse } from 'axios'
 dotenv.config();
 
 // Extend Request type to include userId
@@ -15,28 +14,28 @@ declare module 'express' {
 
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.header('Authorization');
-  log('Authorization Header:', authHeader);
   const token = authHeader?.replace('Bearer ', '');
   if (!token) {
-    log('No token provided');
     return res.status(401).json({ message: 'No token provided' });
   }
   try {
-    log('Token:', token);
-    log('JWT_SECRET:', process.env.JWT_SECRET);
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: string };
-    log('Decoded Token:', decoded);
     req.userId = decoded.userId;
     next();
   } catch (error: any) {
-    log('JWT Verification Error:', error.message);
     res.status(401).json({ message: 'Invalid token' });
   }
 };
 
 // Placeholder function to generate assistant response
-function generateResponse(question: string): string {
-  return `Here's some information about "${question}". For detailed legal advice, please consult a lawyer.`;
+async function generateResponse(question: string): Promise<string>  {
+  const ans = await  axios.post('http://183.82.62.137:8000/query',{
+      "query": question,
+      "zilliz_api_key": "5a82d2e27776c92556dec33d180f50412d60b618ba9781c37b3161ec21ef81ef39ac413baec3f7c9adbcae3b1df19a871ef6119d",
+      "gemini_api_key": "AIzaSyDQVfe4B1WJVCUdLkllHdwJULcrkRZvX0Q"
+  
+  })
+  return ans.data.response;
 }
 
 const router = express.Router();
@@ -69,7 +68,7 @@ router.post('/chat-sessions/ask', authMiddleware, async (req: Request, res: Resp
       title,
       conversation: [{ role: 'user', message: question }],
     });
-    const response = generateResponse(question);
+    const response = await generateResponse(question);
     newSession.conversation.push({ role: 'assistant', message: response });
     await newSession.save();
     res.json(newSession);
@@ -91,7 +90,7 @@ router.post('/chat-sessions/:id/ask', authMiddleware, async (req: Request, res: 
       return res.status(404).json({ message: 'Chat session not found' });
     }
     session.conversation.push({ role: 'user', message: question });
-    const response = generateResponse(question);
+    const response = await generateResponse(question);
     session.conversation.push({ role: 'assistant', message: response });
     session.updatedAt = new Date();
     await session.save();
