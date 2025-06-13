@@ -1,17 +1,23 @@
-# Step 1: Use node image
-FROM node:18-alpine
+# Use a Node.js base image
+FROM node:20
 
-# Step 2: Set working directory
-WORKDIR /usr/src/app
+# Set working directory
+WORKDIR /app
 
-# Step 3: Copy dependencies and install with pnpm
-COPY package*.json ./
-COPY pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install
+# Copy lockfile and package.json
+COPY backend/package.json backend/pnpm-lock.yaml ./
 
-# Step 4: Copy source code and build it
-COPY . .
+# Install pnpm
+RUN npm install -g pnpm
+
+# Install dependencies
+RUN pnpm install
+
+# Copy source code
+COPY backend ./
+
+# Build TypeScript
 RUN pnpm build
 
-# Step 5: Run the server
-CMD ["node", "dist/index.js"]
+# Start the server
+CMD ["pnpm", "start"]
