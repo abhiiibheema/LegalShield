@@ -1,21 +1,17 @@
-# Use official Node image
+# Step 1: Use node image
 FROM node:18-alpine
 
-# Create app directory
+# Step 2: Set working directory
 WORKDIR /usr/src/app
 
-# Copy package files and install dependencies
+# Step 3: Copy dependencies and install with pnpm
 COPY package*.json ./
-RUN npm install
+COPY pnpm-lock.yaml ./
+RUN npm install -g pnpm && pnpm install
 
-# Copy rest of the source code
+# Step 4: Copy source code and build it
 COPY . .
+RUN pnpm build
 
-# Build the TypeScript code (creates dist/)
-RUN npm run build
-
-# Expose backend port (change if needed)
-EXPOSE 5000
-
-# Start the backend app
-CMD ["npm", "start"]
+# Step 5: Run the server
+CMD ["node", "dist/index.js"]
