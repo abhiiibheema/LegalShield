@@ -60,11 +60,11 @@ const HomePage: React.FC = () => {
       return;
     }
     axios
-      .get('http://localhost:3000/api/verify-token', {
+      .get(`${import.meta.env.VITE_API_URL}/api/verify-token`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => {
-        return axios.get('http://localhost:3000/api/chat-sessions', {
+        return axios.get(`${import.meta.env.VITE_API_URL}/api/chat-sessions`, {
           headers: { Authorization: `Bearer ${token}` },
         });
       })
@@ -104,7 +104,7 @@ const HomePage: React.FC = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:3000/api/chat-sessions',
+        `${import.meta.env.VITE_API_URL}/api/chat-sessions`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -132,7 +132,7 @@ const HomePage: React.FC = () => {
   const handleDeleteSession = async (sessionId: string) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:3000/api/chat-sessions/${sessionId}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/chat-sessions/${sessionId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setChatHistory(prev => prev.filter(session => session._id !== sessionId));
@@ -149,7 +149,7 @@ const HomePage: React.FC = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `http://localhost:3000/api/chat-sessions/${sessionId}/rename`,
+        `${import.meta.env.VITE_API_URL}/api/chat-sessions/${sessionId}/rename`,
         { newTitle },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -175,7 +175,7 @@ const HomePage: React.FC = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:3000/api/chat-sessions/ask',
+        '${import.meta.env.VITE_API_URL}/api/chat-sessions/ask',
         { question: query },
         {
           headers: { Authorization: `Bearer ${token}` },

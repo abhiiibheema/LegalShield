@@ -18,7 +18,7 @@ const SearchInterface: React.FC<SearchInterfaceProps> = ({ onSubmitQuestion }) =
     setIsLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.post('http://localhost:3000/api/chat-sessions/ask',
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/chat-sessions/ask`,
         { question: query },
         { headers: { Authorization: `Bearer ${token}` } }
       );

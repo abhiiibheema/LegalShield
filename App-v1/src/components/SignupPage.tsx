@@ -30,7 +30,7 @@ const SignupPage: React.FC = () => {
     }
     try {
       const { name, email, password } = formData;
-      const response = await axios.post('http://localhost:3000/api/signup', { name, email, password });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/signup`, { name, email, password });
       const token = response.data.token;
       localStorage.setItem('token', token);
       navigate('/home');

@@ -16,7 +16,7 @@ const ForgotPasswordPage: React.FC = () => {
     e.preventDefault();
     setMessage(null);
     try {
-      await axios.post('http://localhost:3000/api/forgot-password', { email });
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/forgot-password`, { email });
       setMessage('If the email exists, a reset link has been sent.');
     } catch (error) {
       setMessage('An error occurred. Please try again.');

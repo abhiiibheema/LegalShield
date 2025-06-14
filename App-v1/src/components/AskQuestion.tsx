@@ -34,7 +34,7 @@ const AskQuestion: React.FC<AskQuestionProps> = ({ session, onCreateSession, onU
       const token = localStorage.getItem('token');
       if (!session) {
         const response = await axios.post(
-          'http://localhost:3000/api/chat-sessions/ask',
+          `${import.meta.env.VITE_API_URL}/api/chat-sessions/ask`,
           { question: query },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -42,7 +42,7 @@ const AskQuestion: React.FC<AskQuestionProps> = ({ session, onCreateSession, onU
         onCreateSession(newSession);
       } else {
         const response = await axios.post(
-          `http://localhost:3000/api/chat-sessions/${session._id}/ask`,
+          `${import.meta.env.VITE_API_URL}/api/chat-sessions/${session._id}/ask`,
           { question: query },
           { headers: { Authorization: `Bearer ${token}` } }
         );

@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
     setError(null);
     try {
       const { email, password } = formData;
-      const response = await axios.post('http://localhost:3000/api/signin', { email, password });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/signin`, { email, password });
       const token = response.data.token;
       localStorage.setItem('token', token);
       navigate('/home');
